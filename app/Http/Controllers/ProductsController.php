@@ -2,18 +2,25 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Product;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class ProductsController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function index()
     {
-        //
+        //Get all Product using Query Builder
+        $products = DB::table('products')->get();
+        return response()->json([
+            'Message' => "List of products are",
+            'Products' => $products,
+        ], 201);
     }
 
     /**
@@ -21,31 +28,44 @@ class ProductsController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
-    {
-        //
-    }
+
 
     /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function store(Request $request)
     {
-        //
+        $validatedData = $request->validate([
+            'product_name' => 'required|string|between:2,30',
+            'product_code' => 'required|string|max:15',
+            'details' => 'required|string|max:100',
+
+        ]);
+        $data =
+       $products =Product::create($request->all());
+
+       return response()->json("Record created successfully");
+
+
+
     }
 
     /**
      * Display the specified resource.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function show($id)
     {
-        //
+        $product = DB::table('products')->where('id', $id)->first();
+        return response()->json([
+            'Message' => "The required product is",
+            'Product' => $product,
+        ], 201);
     }
 
     /**
@@ -54,31 +74,36 @@ class ProductsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
-    {
-        //
-    }
+
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function update(Request $request, $id)
     {
-        //
+        $updatedProduct = Product::findOrFail($id);
+        $updatedProduct->update($request->all());
+        return response()->json([
+            'message' => 'Record updated successfully',
+            'Updated Product'=> $updatedProduct
+        ]);
     }
 
     /**
      * Remove the specified resource from storage.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function destroy($id)
     {
-        //
+        DB::table('products')->where('id', $id)->delete();
+        return response()->json([
+            'messsage' => "record deleted successfully",
+        ], 201);
     }
 }
