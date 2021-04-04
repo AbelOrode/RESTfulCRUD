@@ -14,16 +14,16 @@ return [
     */
 
     //Web Default Guard
-//    'defaults' => [
-//        'guard' => 'web',
-//        'passwords' => 'users',
-//    ],
-
-    //API Default Guard
     'defaults' => [
-        'guard' => 'api',
+        'guard' => 'web',
         'passwords' => 'users',
     ],
+
+    //API Default Guard
+//    'defaults' => [
+//        'guard' => 'api',
+//        'passwords' => 'users',
+//    ],
 
     /*
     |--------------------------------------------------------------------------

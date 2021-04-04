@@ -11,16 +11,24 @@ class ProductsController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Http\JsonResponse
      */
     public function index()
     {
-        //Get all Product using Query Builder
-        $products = DB::table('products')->get();
-        return response()->json([
-            'Message' => "List of products are",
-            'Products' => $products,
-        ], 201);
+        //Get all Product RESTFul API statements
+//        $products = DB::table('products')->get();
+//        return response()->json([
+//            'Message' => "List of products are",
+//            'Products' => $products,
+//        ], 201);
+
+
+        //Get all Product RESTFul web statements
+
+        $products = Product::latest()->get();
+
+        return view('index', compact('products'));
+
     }
 
     /**
