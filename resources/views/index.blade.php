@@ -12,10 +12,16 @@
             </div>
 
             <div class="float-right">
-                <a class="btn btn-outline-info" href="">Create New Item</a>
+                <a class="btn btn-outline-info" href="{{ route('create') }}">Create New Item</a>
             </div>
         </div>
         <br><br><br><br><br>
+
+        @if($message = Session::get('success'))
+            <div class="alert alert-success">
+                <p>{{$message}}</p>
+            </div>
+        @endif
         <table class="table table-bordered">
             <thead class="text-center">
                 <tr class="">
@@ -34,7 +40,7 @@
                     <td>{{$product->product_name}}</td>
                     <td>{{$product->product_code}}</td>
                     <td>{{$product->details}}</td>
-                    <td>{{$product->logo}}</td>
+                    <td><img src="{{ URL::to($product->logo) }}" style="width: 70px; height: 70px;"></td>
                     <td>
                         <a href="" class="btn btn-outline-primary">Show</a>
                         <a href="" class="btn btn-outline-secondary">Edit</a>

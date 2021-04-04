@@ -27,3 +27,5 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 
 //Products Route Controller
 Route::get('/', [ProductsController::class, 'index'])->name('index');
+Route::get('/create', [ProductsController::class, 'create'])->name('create');
+Route::post('/store', [ProductsController::class, 'store'])->name('store');

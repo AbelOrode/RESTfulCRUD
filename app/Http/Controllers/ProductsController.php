@@ -41,21 +41,56 @@ class ProductsController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\JsonResponse
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Http\JsonResponse
      */
+
+    public function create()
+    {
+        return view('create');
+    }
+
     public function store(Request $request)
     {
+        //API store method
+//        $validatedData = $request->validate([
+//            'product_name' => 'required|string|between:2,30',
+//            'product_code' => 'required|string|max:15',
+//            'details' => 'required|string|max:100',
+//
+//        ]);
+//        $data =
+//       $products =Product::create($request->all());
+//
+//       return response()->json("Record created successfully");
+
+        //Web store method
+
         $validatedData = $request->validate([
             'product_name' => 'required|string|between:2,30',
             'product_code' => 'required|string|max:15',
             'details' => 'required|string|max:100',
-
         ]);
-        $data =
-       $products =Product::create($request->all());
 
-       return response()->json("Record created successfully");
+        $data = array();
+        $data['product_name'] = $request->product_name;
+        $data['product_code'] = $request->product_code;
+        $data['details'] = $request->details;
+
+        $image = $request->file('logo');
+
+            $image_name = date('dmy_H_s_i');
+            $ext = strtolower($image->getClientOriginalExtension());
+            $image_full_name = $image_name . '.' . $ext;
+            $upload_path = 'public/backend/images/';
+            $image_url = $upload_path.$image_full_name;
+            $success = $image->move($upload_path, $image_full_name);
+
+            $data['logo'] = $image_url;
+
+            Product::create($data);
+
+            return redirect()->route('index')->with('success', 'Product created successfully');
 
 
 
@@ -64,7 +99,7 @@ class ProductsController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\JsonResponse
      */
     public function show($id)
@@ -79,7 +114,7 @@ class ProductsController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
 
@@ -87,8 +122,8 @@ class ProductsController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param \Illuminate\Http\Request $request
+     * @param int $id
      * @return \Illuminate\Http\JsonResponse
      */
     public function update(Request $request, $id)
@@ -97,14 +132,14 @@ class ProductsController extends Controller
         $updatedProduct->update($request->all());
         return response()->json([
             'message' => 'Record updated successfully',
-            'Updated Product'=> $updatedProduct
+            'Updated Product' => $updatedProduct
         ]);
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\JsonResponse
      */
     public function destroy($id)
